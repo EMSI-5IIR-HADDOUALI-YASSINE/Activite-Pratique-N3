@@ -1,0 +1,89 @@
+<div class="container mt-3">
+  <!-- Exercice 1 : formulaire d'ajout -->
+  <div class="card shadow-sm mb-3">
+    <div class="card-header bg-success text-white">
+      <h5 class="mb-0"><i class="bi bi-plus-circle"></i> Nouveau produit</h5>
+    </div>
+    <div class="card-body">
+      <form class="row g-2" (ngSubmit)="handleAdd()">
+        <div class="col-md-5">
+          <input class="form-control" name="name" placeholder="Nom" [(ngModel)]="newProduct.name" required>
+        </div>
+        <div class="col-md-3">
+          <input class="form-control" type="number" name="price" placeholder="Prix" [(ngModel)]="newProduct.price" min="0">
+        </div>
+        <div class="col-md-2 d-flex align-items-center">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="sel" name="selected" [(ngModel)]="newProduct.selected">
+            <label class="form-check-label" for="sel">Sélectionné</label>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <button class="btn btn-success w-100" type="submit"><i class="bi bi-save"></i> Ajouter</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h3 class="mb-0">Liste des Produits</h3>
+    </div>
+    <div class="card-body">
+      @if (errorMessage) {
+        <div class="alert alert-danger">{{ errorMessage }}</div>
+      }
+
+      <!-- Exercice 3 : filtre dynamique -->
+      <div class="input-group mb-3">
+        <span class="input-group-text"><i class="bi bi-search"></i></span>
+        <input class="form-control" placeholder="Rechercher un produit..." [(ngModel)]="keyword">
+      </div>
+
+      @if (products) {
+        <table class="table table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>ID</th>
+              <th>Nom</th>
+              <th>Prix</th>
+              <th>Statut</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (p of filteredProducts; track p.id) {
+              <tr>
+                <td>{{ p.id }}</td>
+                <td>{{ p.name }}</td>
+                <td>{{ p.price | currency:'EUR' }}</td>
+                <td>
+                  <!-- Exercice 2 : clic sur le badge pour basculer -->
+                  <span role="button" (click)="handleToggle(p)"
+                        [class]="p.selected
+                          ? 'badge bg-success-subtle text-success border border-success'
+                          : 'badge bg-secondary-subtle text-secondary border'">
+                    @if (p.selected) {
+                      <i class="bi bi-check-circle-fill"></i> Sélectionné
+                    } @else {
+                      <i class="bi bi-circle"></i> Non sélectionné
+                    }
+                  </span>
+                </td>
+                <td>
+                  <button (click)="handleDelete(p)" class="btn btn-outline-danger btn-sm">
+                    <i class="bi bi-trash"></i> Supprimer
+                  </button>
+                </td>
+              </tr>
+            } @empty {
+              <tr><td colspan="5" class="text-center text-muted">Aucun produit trouvé.</td></tr>
+            }
+          </tbody>
+        </table>
+      } @else if (!errorMessage) {
+        <div class="alert alert-info">Chargement du catalogue en cours...</div>
+      }
+    </div>
+  </div>
+</div>
