@@ -1,5 +1,7 @@
 # InsetApp
 
+Activité pratique N°3 — EMSI EDSIM-G2 — Haddouali Yassine
+
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.27.
 
 ## Development server
